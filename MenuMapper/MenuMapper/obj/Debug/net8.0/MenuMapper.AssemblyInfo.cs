@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MenuMapper")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2aa64e24528d2f5807c652252afe88ec6f44b0ea")]
 [assembly: System.Reflection.AssemblyProductAttribute("MenuMapper")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MenuMapper")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

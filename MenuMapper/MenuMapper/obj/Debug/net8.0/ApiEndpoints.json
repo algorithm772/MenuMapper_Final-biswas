@@ -27,6 +27,27 @@
   },
   {
     "ContainingType": "MenuMapper.Controllers.MenuApiController",
+    "Method": "UpdateMenuItem",
+    "RelativePath": "api/menu/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "MenuMapper.Controllers.MenuItemRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MenuMapper.Controllers.MenuApiController",
     "Method": "DeleteMenu",
     "RelativePath": "api/menu/{id}",
     "HttpMethod": "DELETE",

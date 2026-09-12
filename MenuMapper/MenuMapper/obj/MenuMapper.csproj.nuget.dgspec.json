@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\MenuMapper.csproj": {}
+    "D:\\code\\MenuMapper_Final (1)\\MenuMapper\\MenuMapper\\MenuMapper.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\MenuMapper.csproj": {
+    "D:\\code\\MenuMapper_Final (1)\\MenuMapper\\MenuMapper\\MenuMapper.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\MenuMapper.csproj",
+        "projectUniqueName": "D:\\code\\MenuMapper_Final (1)\\MenuMapper\\MenuMapper\\MenuMapper.csproj",
         "projectName": "MenuMapper",
-        "projectPath": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\MenuMapper.csproj",
-        "packagesPath": "C:\\Users\\bibas\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\obj\\",
+        "projectPath": "D:\\code\\MenuMapper_Final (1)\\MenuMapper\\MenuMapper\\MenuMapper.csproj",
+        "packagesPath": "C:\\Users\\Mrlog\\.nuget\\packages\\",
+        "outputPath": "D:\\code\\MenuMapper_Final (1)\\MenuMapper\\MenuMapper\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "D:\\ide\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\bibas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Mrlog\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

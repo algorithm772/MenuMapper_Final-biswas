@@ -1,10 +1,9 @@
-﻿using Azure.Core;
-using MenuMapper.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using MenuMapper.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace MenuMapper.Controllers
 {
@@ -33,10 +32,10 @@ namespace MenuMapper.Controllers
                 name = i.Name,
                 category = i.Category,
                 price = i.Price,
+                imageUrl = i.ImageUrl, // Includes the image URL
                 ingredients = string.IsNullOrEmpty(i.Ingredients) ? new string[0] : i.Ingredients.Split(',').Select(x => x.Trim()),
                 allergens = i.MenuItemAllergens.Select(ma => ma.Allergen.Name).ToList(),
                 crossContact = new string[0],
-                imageUrl = i.ImageUrl,
                 status = i.Status
             });
 
@@ -99,6 +98,56 @@ namespace MenuMapper.Controllers
             return Ok(newItem);
         }
 
+        // PUT: api/menu/{id} (Updates an existing item from the Edit form)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateMenuItem(int id, [FromBody] MenuItemRequest request)
+        {
+            var item = await _context.MenuItems
+                .Include(m => m.MenuItemAllergens)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            // Update main properties
+            item.Name = request.Name;
+            item.Category = request.Category;
+            item.Price = request.Price;
+            item.Status = request.Status;
+            item.ImageUrl = request.ImageUrl;
+            item.Ingredients = request.Ingredients != null ? string.Join(", ", request.Ingredients) : "";
+
+            // Clear old allergen links to avoid duplicates
+            _context.MenuItemAllergens.RemoveRange(item.MenuItemAllergens);
+
+            // Re-map the new allergens based on the edited form
+            if (request.Allergens != null && request.Allergens.Count > 0)
+            {
+                var allDbAllergens = await _context.Allergens.ToListAsync();
+                foreach (var allergenName in request.Allergens)
+                {
+                    var dbAllergen = allDbAllergens.FirstOrDefault(a => a.Name.ToLower() == allergenName.ToLower());
+                    if (dbAllergen == null)
+                    {
+                        dbAllergen = new Allergen { Name = allergenName };
+                        _context.Allergens.Add(dbAllergen);
+                        await _context.SaveChangesAsync();
+                        allDbAllergens.Add(dbAllergen);
+                    }
+                    _context.MenuItemAllergens.Add(new MenuItemAllergen
+                    {
+                        MenuItemId = item.Id,
+                        AllergenId = dbAllergen.Id
+                    });
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(item);
+        }
+
         // DELETE: api/menu/{id} (Removes item and its bridge records from SQL)
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMenu(int id)
@@ -126,9 +175,9 @@ namespace MenuMapper.Controllers
         public string Name { get; set; }
         public string Category { get; set; }
         public decimal Price { get; set; }
+        public string ImageUrl { get; set; }
         public List<string> Ingredients { get; set; }
         public List<string> Allergens { get; set; }
         public string Status { get; set; }
-        public string ImageUrl { get; set; } // Add this line
     }
 }
