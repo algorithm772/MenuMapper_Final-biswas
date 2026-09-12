@@ -1,0 +1,199 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|c:\\users\\bibas\\source\\repos\\menumapper\\menumapper\\models\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|solutionrelative:menumapper\\models\\dbinitializer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|c:\\users\\bibas\\source\\repos\\menumapper\\menumapper\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|solutionrelative:menumapper\\models\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|c:\\users\\bibas\\source\\repos\\menumapper\\menumapper\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|solutionrelative:menumapper\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|c:\\users\\bibas\\source\\repos\\menumapper\\menumapper\\models\\menuitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|solutionrelative:menumapper\\models\\menuitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|c:\\users\\bibas\\source\\repos\\menumapper\\menumapper\\models\\allergen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|solutionrelative:menumapper\\models\\allergen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|c:\\users\\bibas\\source\\repos\\menumapper\\menumapper\\models\\menuitemallergen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|solutionrelative:menumapper\\models\\menuitemallergen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|c:\\users\\bibas\\source\\repos\\menumapper\\menumapper\\controllers\\menuapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|solutionrelative:menumapper\\controllers\\menuapicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|c:\\users\\bibas\\source\\repos\\menumapper\\menumapper\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|solutionrelative:menumapper\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|c:\\users\\bibas\\source\\repos\\menumapper\\menumapper\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|solutionrelative:menumapper\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|c:\\users\\bibas\\source\\repos\\menumapper\\menumapper\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|solutionrelative:menumapper\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|c:\\users\\bibas\\source\\repos\\menumapper\\menumapper\\migrations\\20260909093538_addedimagefield.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ACA7B614-0C24-4DFF-A7D0-2546367DDED2}|MenuMapper\\MenuMapper.csproj|solutionrelative:menumapper\\migrations\\20260909093538_addedimagefield.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "20260909093538_AddedImageField.cs",
+              "DocumentMoniker": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Migrations\\20260909093538_AddedImageField.cs",
+              "RelativeDocumentMoniker": "MenuMapper\\Migrations\\20260909093538_AddedImageField.cs",
+              "ToolTip": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Migrations\\20260909093538_AddedImageField.cs",
+              "RelativeToolTip": "MenuMapper\\Migrations\\20260909093538_AddedImageField.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-09T09:35:38.83Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MenuApiController.cs",
+              "DocumentMoniker": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Controllers\\MenuApiController.cs",
+              "RelativeDocumentMoniker": "MenuMapper\\Controllers\\MenuApiController.cs",
+              "ToolTip": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Controllers\\MenuApiController.cs",
+              "RelativeToolTip": "MenuMapper\\Controllers\\MenuApiController.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAswD0AAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-09T05:45:41.13Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Program.cs",
+              "RelativeDocumentMoniker": "MenuMapper\\Program.cs",
+              "ToolTip": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Program.cs",
+              "RelativeToolTip": "MenuMapper\\Program.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAAAA4AAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-09T03:58:03.975Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\appsettings.json",
+              "RelativeDocumentMoniker": "MenuMapper\\appsettings.json",
+              "ToolTip": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\appsettings.json",
+              "RelativeToolTip": "MenuMapper\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-09T03:56:39.733Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "MenuMapper\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "MenuMapper\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAGYAAAAAAAAAAAAqwJgAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2026-09-09T03:53:39.079Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DbInitializer.cs",
+              "DocumentMoniker": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Models\\DbInitializer.cs",
+              "RelativeDocumentMoniker": "MenuMapper\\Models\\DbInitializer.cs",
+              "ToolTip": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Models\\DbInitializer.cs",
+              "RelativeToolTip": "MenuMapper\\Models\\DbInitializer.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAqwCQAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-09T03:50:28.58Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "MenuMapper\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "MenuMapper\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAqwA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-09T03:50:53.966Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Models\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "MenuMapper\\Models\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Models\\AppDbContext.cs",
+              "RelativeToolTip": "MenuMapper\\Models\\AppDbContext.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAQwBIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-09T03:50:06.279Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MenuItemAllergen.cs",
+              "DocumentMoniker": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Models\\MenuItemAllergen.cs",
+              "RelativeDocumentMoniker": "MenuMapper\\Models\\MenuItemAllergen.cs",
+              "ToolTip": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Models\\MenuItemAllergen.cs",
+              "RelativeToolTip": "MenuMapper\\Models\\MenuItemAllergen.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-09T03:49:44.291Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Allergen.cs",
+              "DocumentMoniker": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Models\\Allergen.cs",
+              "RelativeDocumentMoniker": "MenuMapper\\Models\\Allergen.cs",
+              "ToolTip": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Models\\Allergen.cs",
+              "RelativeToolTip": "MenuMapper\\Models\\Allergen.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwBAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-09T03:49:23.494Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MenuItem.cs",
+              "DocumentMoniker": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Models\\MenuItem.cs",
+              "RelativeDocumentMoniker": "MenuMapper\\Models\\MenuItem.cs",
+              "ToolTip": "C:\\Users\\bibas\\source\\repos\\MenuMapper\\MenuMapper\\Models\\MenuItem.cs",
+              "RelativeToolTip": "MenuMapper\\Models\\MenuItem.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-09T03:48:53.187Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

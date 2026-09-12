@@ -1,0 +1,564 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allergen Menu Mapper</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#f0fdf4', 100: '#dcfce7', 500: '#22c55e', 600: '#16a34a', 900: '#14532d' },
+                        danger: { 50: '#fef2f2', 100: '#fee2e2', 500: '#ef4444', 600: '#dc2626' },
+                        warning: { 50: '#fffbeb', 100: '#fef3c7', 500: '#f59e0b', 600: '#d97706' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .mobile-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.08);
+            overflow-x: hidden;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Custom Animations (Escaped with @@ for Razor) */
+        @@keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        .animate-slide-in {
+            animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+
+        // --- ICONS ---
+        const IconCheck = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>;
+        const IconX = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>;
+        const IconAlert = () => <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>;
+        const IconLeaf = () => <svg className="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 11a9 9 0 019 9M4 11a9 9 0 019-9m-9 9a9 9 0 009-9m0 18a9 9 0 009-9m-9 9v-9"></path></svg>;
+
+        const ALLERGEN_LIST = [
+            "Dairy", "Peanuts", "Tree Nuts", "Gluten", "Egg", "Soy",
+            "Fish", "Shellfish", "Molluscs", "Sesame", "Mustard",
+            "Celery", "Lupin", "Sulfites", "Mushrooms"
+        ];
+
+        // The Global 14 + Mushrooms
+        const INGREDIENT_TO_ALLERGEN_MAP = {
+            // Dairy
+            'milk': 'Dairy', 'butter': 'Dairy', 'cheese': 'Dairy', 'paneer': 'Dairy', 'curd': 'Dairy', 'cream': 'Dairy', 'yogurt': 'Dairy', 'ghee': 'Dairy', 'whey': 'Dairy',
+
+            // Peanuts vs Tree Nuts
+            'peanut': 'Peanuts', 'peanut butter': 'Peanuts', 'groundnut': 'Peanuts',
+            'almond': 'Tree Nuts', 'cashew': 'Tree Nuts', 'coconut': 'Tree Nuts', 'walnut': 'Tree Nuts', 'pecan': 'Tree Nuts', 'pistachio': 'Tree Nuts', 'macadamia': 'Tree Nuts', 'hazelnut': 'Tree Nuts', 'pine nut': 'Tree Nuts',
+
+            // Gluten
+            'wheat': 'Gluten', 'flour': 'Gluten', 'bread': 'Gluten', 'yeast': 'Gluten', 'barley': 'Gluten', 'rye': 'Gluten', 'oats': 'Gluten', 'malt': 'Gluten',
+
+            // Egg
+            'egg': 'Egg', 'mayo': 'Egg', 'mayonnaise': 'Egg', 'albumen': 'Egg', 'meringue': 'Egg',
+
+            // Soy
+            'soy': 'Soy', 'soya': 'Soy', 'soy sauce': 'Soy', 'tofu': 'Soy', 'edamame': 'Soy', 'tempeh': 'Soy', 'miso': 'Soy', 'tamari': 'Soy', 'soybean': 'Soy',
+
+            // Seafood
+            'fish': 'Fish', 'salmon': 'Fish', 'tuna': 'Fish', 'cod': 'Fish', 'tilapia': 'Fish', 'anchovy': 'Fish', 'sardine': 'Fish', 'trout': 'Fish', 'mahi mahi': 'Fish', 'halibut': 'Fish',
+            'shellfish': 'Shellfish', 'shrimp': 'Shellfish', 'crab': 'Shellfish', 'lobster': 'Shellfish', 'prawn': 'Shellfish', 'crawfish': 'Shellfish', 'scampi': 'Shellfish',
+            'mollusc': 'Molluscs', 'oyster': 'Molluscs', 'clam': 'Molluscs', 'scallop': 'Molluscs', 'mussel': 'Molluscs', 'squid': 'Molluscs', 'octopus': 'Molluscs', 'calamari': 'Molluscs',
+
+            // Seeds & Spices
+            'sesame': 'Sesame', 'tahini': 'Sesame', 'hummus': 'Sesame',
+            'mustard': 'Mustard', 'dijon': 'Mustard', 'mustard seed': 'Mustard',
+            'celery': 'Celery', 'celeriac': 'Celery', 'celery salt': 'Celery',
+
+            // Others
+            'lupin': 'Lupin', 'lupin flour': 'Lupin', 'lupin bean': 'Lupin',
+            'sulfite': 'Sulfites', 'wine': 'Sulfites', 'balsamic': 'Sulfites', 'vinegar': 'Sulfites', 'dried fruit': 'Sulfites',
+
+            // Mushrooms (New)
+            'mushroom': 'Mushrooms', 'truffle': 'Mushrooms', 'porcini': 'Mushrooms', 'shiitake': 'Mushrooms', 'portobello': 'Mushrooms', 'cremini': 'Mushrooms', 'button mushroom': 'Mushrooms'
+        };
+
+        // --- COMPONENTS ---
+
+        function App() {
+            const [view, setView] = useState('landing');
+            const [menuItems, setMenuItems] = useState([]);
+
+            const fetchMenu = () => {
+                fetch('/api/menu')
+                    .then(res => res.json())
+                    .then(data => setMenuItems(data));
+            };
+
+            useEffect(() => {
+                fetchMenu();
+            }, []);
+
+            return (
+                <div className="min-h-screen flex flex-col">
+                    <nav className="bg-white border-b border-gray-200 px-6 py-3 flex justify-between items-center z-50 sticky top-0 shadow-sm animate-fade-in">
+                        <div className="flex items-center gap-2 cursor-pointer transition hover:opacity-80" onClick={() => setView('landing')}>
+                            <IconLeaf />
+                            <span className="font-bold text-xl text-slate-800 tracking-tight">ALLERGEN <span className="text-brand-600">MAPPER</span></span>
+                        </div>
+                        <div className="flex gap-4">
+                            <button onClick={() => setView('dashboard')} className={`text-sm font-semibold px-4 py-2 rounded-md transition duration-200 ${view === 'dashboard' ? 'bg-slate-100 text-slate-900 shadow-inner' : 'text-slate-600 hover:bg-slate-50'}`}>Restaurant Portal</button>
+                            <button onClick={() => setView('customer')} className={`text-sm font-semibold px-4 py-2 rounded-md transition duration-200 shadow-sm hover:-translate-y-0.5 ${view === 'customer' ? 'bg-brand-50 text-brand-600 border border-brand-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>Customer Menu</button>
+                        </div>
+                    </nav>
+
+                    <div className="flex-1 flex flex-col relative overflow-hidden">
+                        {view === 'landing' && <LandingPage setView={setView} />}
+                        {view === 'dashboard' && <RestaurantDashboard menuItems={menuItems} fetchMenu={fetchMenu} />}
+                        {view === 'customer' && <CustomerApp menuItems={menuItems} />}
+                    </div>
+                </div>
+            );
+        }
+
+        function LandingPage({ setView }) {
+            return (
+                <div className="flex-1 flex flex-col lg:flex-row bg-white animate-fade-in relative overflow-hidden">
+
+                    {/* Left Content Section */}
+                    <div className="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 py-20 z-10 bg-white lg:bg-transparent relative">
+                        {/* Gradient mask to blend text nicely into the image on desktop */}
+                        <div className="hidden lg:block absolute inset-0 bg-gradient-to-r from-white via-white to-transparent w-[120%] -z-10"></div>
+
+                        <div className="max-w-2xl animate-slide-up">
+                            <span className="bg-brand-50 text-brand-600 font-bold px-4 py-1.5 rounded-full text-sm mb-6 inline-flex items-center gap-2 border border-brand-200 shadow-sm">
+                                <IconCheck /> Personalized dining. Safer choices.
+                            </span>
+                            <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-6 leading-tight">
+                                Know what’s on <br/>
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-emerald-700">
+                                    your plate.
+                                </span>
+                            </h1>
+                            <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-xl">
+                                Help guests make informed dining choices with ingredient-level allergen mapping and personalized, dynamically filtered menus.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <button onClick={() => setView('customer')} className="bg-brand-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-brand-700 shadow-lg shadow-brand-500/30 transition-all duration-300 hover:-translate-y-1 active:scale-95 text-center flex items-center justify-center gap-2">
+                                    Try Customer Menu
+                                </button>
+                                <button onClick={() => setView('dashboard')} className="bg-white border-2 border-slate-200 text-slate-800 px-8 py-4 rounded-xl font-bold text-lg hover:border-slate-300 hover:bg-slate-50 transition-all duration-300 hover:-translate-y-1 active:scale-95 shadow-sm text-center">
+                                    Restaurant Portal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Image Section */}
+                    <div className="flex-1 relative min-h-[400px] lg:min-h-screen z-0">
+                        <img
+                            src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1920&q=80"
+                            alt="Beautiful restaurant food spread"
+                            className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        {/* Overlay gradients to make the image blend smoothly */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent lg:hidden"></div>
+                        <div className="absolute inset-0 bg-slate-900/10 hover:bg-transparent transition duration-700"></div>
+                    </div>
+
+                </div>
+            );
+        }
+
+        function RestaurantDashboard({ menuItems, fetchMenu }) {
+            const [tab, setTab] = useState('overview');
+            return (
+                <div className="flex-1 flex bg-slate-50 animate-fade-in">
+                    <div className="w-64 bg-white border-r border-slate-200 p-4 flex flex-col gap-2 shadow-sm z-10">
+                        <div className="mb-6 px-2">
+                            <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">The Spice Table</h2>
+                            <p className="text-sm font-semibold text-slate-800">Manager Dashboard</p>
+                        </div>
+                        <button onClick={() => setTab('overview')} className={`text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${tab === 'overview' ? 'bg-brand-50 text-brand-700 border border-brand-100' : 'text-slate-600 hover:bg-slate-100'}`}>Overview & Menu</button>
+                        <button onClick={() => setTab('add')} className={`text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${tab === 'add' ? 'bg-brand-50 text-brand-700 border border-brand-100' : 'text-slate-600 hover:bg-slate-100'}`}>+ Add Menu Item</button>
+                        <button onClick={() => setTab('matrix')} className={`text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${tab === 'matrix' ? 'bg-brand-50 text-brand-700 border border-brand-100' : 'text-slate-600 hover:bg-slate-100'}`}>Allergen Matrix</button>
+                    </div>
+                    <div className="flex-1 p-8 overflow-y-auto">
+                        {tab === 'overview' && <DashboardOverview menuItems={menuItems} fetchMenu={fetchMenu} />}
+                        {tab === 'add' && <AddMenuItemForm fetchMenu={fetchMenu} setTab={setTab} />}
+                        {tab === 'matrix' && <AllergenMatrix menuItems={menuItems} />}
+                    </div>
+                </div>
+            );
+        }
+
+        // ... (Keep DashboardOverview, AddMenuItemForm, AllergenMatrix exactly the same. Omitted for brevity in explanation, but including in code)
+        function DashboardOverview({ menuItems, fetchMenu }) {
+            const deleteItem = (id) => { fetch('/api/menu/' + id, { method: 'DELETE' }).then(() => fetchMenu()); };
+            return (
+                <div className="max-w-5xl animate-slide-up" style={{animationDelay: '0.1s'}}>
+                    <h2 className="text-2xl font-bold text-slate-900 mb-6">Dashboard Overview</h2>
+                    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center"><h3 className="font-bold text-slate-800">Menu Management</h3></div>
+                        <table className="w-full text-left text-sm text-slate-600">
+                            <thead className="bg-slate-50 text-slate-500 uppercase text-xs font-semibold">
+                                <tr><th className="px-6 py-3">Dish Name</th><th className="px-6 py-3">Category</th><th className="px-6 py-3">Price</th><th className="px-6 py-3">Allergens</th><th className="px-6 py-3">Status</th><th className="px-6 py-3 text-right">Action</th></tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {menuItems.map(item => (
+                                    <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                                        <td className="px-6 py-4 font-medium text-slate-900">{item.name}</td>
+                                        <td className="px-6 py-4">{item.category}</td>
+                                        <td className="px-6 py-4">₹{item.price.toFixed(2)}</td>
+                                        <td className="px-6 py-4">{item.allergens.length > 0 ? <div className="flex gap-1 flex-wrap">{item.allergens.map(a => <span key={a} className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded text-xs">{a}</span>)}</div> : <span className="text-slate-400 italic">None</span>}</td>
+                                        <td className="px-6 py-4">{item.status === 'Incomplete' ? <span className="inline-flex items-center gap-1 text-danger-600 bg-danger-50 px-2 py-1 rounded text-xs font-semibold"><IconAlert/> Incomplete</span> : <span className="text-brand-600 bg-brand-50 px-2 py-1 rounded text-xs font-semibold">Complete</span>}</td>
+                                        <td className="px-6 py-4 text-right"><button onClick={() => deleteItem(item.id)} className="text-danger-500 hover:text-danger-700 font-medium transition">Delete</button></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        }
+
+        function AddMenuItemForm({ fetchMenu, setTab }) {
+            const [name, setName] = useState(''); const [category, setCategory] = useState('Starters'); const [price, setPrice] = useState(''); const [imageUrl, setImageUrl] = useState(''); const [ingredientsText, setIngredientsText] = useState(''); const [allergens, setAllergens] = useState([]); const [status, setStatus] = useState('Complete');
+            const handleIngredientsChange = (e) => {
+                const text = e.target.value; setIngredientsText(text); const currentIngredients = text.split(',').map(i => i.trim().toLowerCase()).filter(i => i); let suggested = new Set();
+                currentIngredients.forEach(ing => { Object.keys(INGREDIENT_TO_ALLERGEN_MAP).forEach(key => { if (ing.includes(key)) { suggested.add(INGREDIENT_TO_ALLERGEN_MAP[key]); } }); }); setAllergens(Array.from(suggested));
+            };
+            const toggleAllergen = (a) => { setAllergens(prev => prev.includes(a) ? prev.filter(x => x !== a) : [...prev, a]); };
+            const handleSubmit = (e) => {
+                e.preventDefault(); const newItem = { name, category, price: parseFloat(price) || 0, imageUrl, ingredients: ingredientsText.split(',').map(i => i.trim()).filter(i => i), allergens, status };
+                fetch('/api/menu', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(newItem) }).then(() => { fetchMenu(); setTab('overview'); });
+            };
+            return (
+                <div className="max-w-2xl bg-white rounded-xl border border-slate-200 shadow-sm p-8 animate-slide-up" style={{animationDelay: '0.1s'}}>
+                    <h2 className="text-2xl font-bold text-slate-900 mb-6">Add Menu Item</h2>
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div><label className="block text-sm font-medium text-slate-700 mb-1">Dish Name</label><input required value={name} onChange={e=>setName(e.target.value)} type="text" className="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500 transition-shadow" placeholder="e.g. Paneer Tikka" /></div>
+                            <div><label className="block text-sm font-medium text-slate-700 mb-1">Category</label><select value={category} onChange={e=>setCategory(e.target.value)} className="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none bg-white transition-shadow focus:ring-2 focus:ring-brand-500"><option>Starters</option><option>Main Course</option><option>Rice</option><option>Breads</option><option>Desserts</option><option>Beverages</option></select></div>
+                            <div><label className="block text-sm font-medium text-slate-700 mb-1">Price (₹)</label><input required value={price} onChange={e=>setPrice(e.target.value)} type="number" step="0.01" min="0" className="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500 transition-shadow" placeholder="e.g. 299.00" /></div>
+                        </div>
+                        <div><label className="block text-sm font-medium text-slate-700 mb-1">Image URL (Optional)</label><input value={imageUrl} onChange={e=>setImageUrl(e.target.value)} type="text" className="w-full border border-slate-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-brand-500 transition-shadow" placeholder="https://example.com/image.jpg" /></div>
+                        <div><label className="block text-sm font-medium text-slate-700 mb-1">Ingredients (comma separated)</label><textarea required value={ingredientsText} onChange={handleIngredientsChange} className="w-full border border-slate-300 rounded-lg px-3 py-2 h-24 outline-none focus:ring-2 focus:ring-brand-500 transition-shadow" placeholder="e.g. Paneer, Curd, Spices"></textarea><p className="text-xs text-slate-500 mt-1 flex items-center gap-1"><IconCheck/> System will auto-suggest allergens based on ingredients.</p></div>
+                        <div className="bg-slate-50 p-4 rounded-lg border border-slate-200"><label className="block text-sm font-bold text-slate-800 mb-3">Allergens</label><div className="flex flex-wrap gap-2">{ALLERGEN_LIST.map(a => (<button type="button" key={a} onClick={() => toggleAllergen(a)} className={`px-3 py-1.5 rounded-md text-sm font-medium border transition-all duration-200 active:scale-95 ${allergens.includes(a) ? 'bg-brand-100 border-brand-500 text-brand-800 shadow-sm' : 'bg-white border-slate-300 text-slate-600 hover:bg-slate-100 hover:shadow-sm'}`}>{a}</button>))}</div></div>
+                        <div><label className="block text-sm font-medium text-slate-700 mb-2">Information Completeness</label><div className="flex gap-4"><label className="flex items-center gap-2 cursor-pointer"><input type="radio" name="status" value="Complete" checked={status==='Complete'} onChange={()=>setStatus('Complete')} className="text-brand-600 focus:ring-brand-500" /><span className="text-sm">Complete Information</span></label><label className="flex items-center gap-2 cursor-pointer"><input type="radio" name="status" value="Incomplete" checked={status==='Incomplete'} onChange={()=>setStatus('Incomplete')} className="text-danger-600 focus:ring-danger-500" /><span className="text-sm text-danger-700 font-medium">Incomplete (Needs Confirmation)</span></label></div></div>
+                        <div className="pt-4 border-t border-slate-100 flex justify-end gap-3"><button type="button" onClick={() => setTab('overview')} className="px-5 py-2 rounded-lg text-slate-600 font-medium hover:bg-slate-100 transition-colors">Cancel</button><button type="submit" className="bg-brand-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-brand-700 shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 active:scale-95">Save Menu Item</button></div>
+                    </form>
+                </div>
+            );
+        }
+
+        function AllergenMatrix({ menuItems }) {
+            return (
+                <div className="max-w-5xl animate-slide-up" style={{animationDelay: '0.1s'}}>
+                    <h2 className="text-2xl font-bold text-slate-900 mb-6">Allergen Overview Matrix</h2>
+                    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-x-auto">
+                        <table className="w-full text-left text-sm">
+                            <thead className="bg-slate-50 text-slate-600 border-b border-slate-200">
+                                <tr><th className="px-4 py-3 font-semibold">Dish</th>{ALLERGEN_LIST.map(a => <th key={a} className="px-3 py-3 font-semibold text-center text-xs uppercase">{a}</th>)}</tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                                {menuItems.map(item => (
+                                    <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                                        <td className="px-4 py-3 font-medium text-slate-800">{item.name}</td>
+                                        {ALLERGEN_LIST.map(a => ( <td key={a} className="px-3 py-3 text-center">{item.allergens.includes(a) ? <span className="inline-block w-3 h-3 bg-danger-500 rounded-full shadow-sm"></span> : <span className="text-slate-300">—</span>}</td> ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        }
+
+        // --- CUSTOMER FACING APP WITH ANIMATIONS ---
+        function CustomerApp({ menuItems }) {
+            const [selectedAllergies, setSelectedAllergies] = useState([]);
+            const [selectedDish, setSelectedDish] = useState(null);
+
+            const toggleAllergy = (a) => {
+                setSelectedAllergies(prev => prev.includes(a) ? prev.filter(x => x !== a) : [...prev, a]);
+            };
+
+            const filteredMenu = useMemo(() => {
+                const suitable = []; const notSuitable = []; const needsConfirmation = [];
+                menuItems.forEach(item => {
+                    if (item.status === 'Incomplete') { needsConfirmation.push(item); return; }
+                    const conflictingAllergens = item.allergens.filter(a => selectedAllergies.includes(a));
+                    if (conflictingAllergens.length > 0) { notSuitable.push({ item, conflictingAllergens }); }
+                    else { suitable.push(item); }
+                });
+                return { suitable, notSuitable, needsConfirmation };
+            }, [menuItems, selectedAllergies]);
+
+            if (selectedDish) {
+                return <DishDetailView dish={selectedDish} onBack={() => setSelectedDish(null)} selectedAllergies={selectedAllergies} />;
+            }
+
+            return (
+                <div className="bg-slate-100 flex-1 relative">
+                    <div className="mobile-container relative pb-10 animate-fade-in bg-white min-h-screen">
+
+                        {/* Upgraded Header Background */}
+                        <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-amber-900 text-white p-8 rounded-b-[2.5rem] shadow-lg relative overflow-hidden">
+                            <div className="absolute top-0 right-0 opacity-10 pointer-events-none transform translate-x-4 -translate-y-8 scale-150"><IconLeaf /></div>
+                            <h2 className="text-sm font-medium text-amber-200/80 uppercase tracking-widest mb-1 drop-shadow-sm">Welcome to</h2>
+                            <h1 className="text-4xl font-serif font-bold mb-4 drop-shadow-md tracking-tight">The Spice Table</h1>
+                            <p className="text-sm text-slate-200/90 leading-relaxed max-w-xs">Select your allergies below to personalize your menu instantly.</p>
+                        </div>
+
+                        <div className="px-6 mt-8 animate-slide-up" style={{animationDelay: '0.1s'}}>
+                            <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                                <IconAlert /> What are you allergic to?
+                            </h3>
+                            <div className="flex flex-wrap gap-2.5 mb-6">
+                                {ALLERGEN_LIST.map(a => {
+                                    const active = selectedAllergies.includes(a);
+                                    return (
+                                        <button key={a} onClick={() => toggleAllergy(a)}
+                                            className={`px-4 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 transform active:scale-95 shadow-sm border ${active ? 'bg-danger-500 border-danger-600 text-white shadow-danger-500/30' : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:shadow-md hover:-translate-y-0.5'}`}>
+                                            {a}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        <div className="w-full h-2 bg-slate-50 mb-6"></div>
+
+                        <div className="px-6 space-y-10">
+                            {/* Suitable Items List */}
+                            {selectedAllergies.length > 0 && (
+                                <div>
+                                    <div className="border-b-2 border-brand-500 mb-5 inline-block">
+                                        <h3 className="text-lg font-bold text-brand-700 pb-1">SUITABLE OPTIONS</h3>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {filteredMenu.suitable.map((item, idx) => (
+                                            <div key={item.id} onClick={()=>setSelectedDish(item)} className="bg-white border border-brand-100 rounded-2xl p-4 shadow-sm flex justify-between items-center cursor-pointer transition-all duration-300 hover:border-brand-300 hover:shadow-lg hover:-translate-y-1 animate-slide-up" style={{animationDelay: `${idx * 0.05}s`}}>
+                                                <div className="flex gap-4 items-center">
+                                                    {item.imageUrl && <img src={item.imageUrl} alt={item.name} className="w-20 h-20 rounded-xl object-cover bg-slate-100 shadow-sm" />}
+                                                    <div>
+                                                        <h4 className="font-bold text-slate-900 text-lg mb-0.5">{item.name}</h4>
+                                                        <p className="text-xs text-brand-600 font-bold uppercase tracking-wide">Safe Choice</p>
+                                                    </div>
+                                                </div>
+                                                <span className="font-bold text-slate-700 text-lg">₹{item.price.toFixed(2)}</span>
+                                            </div>
+                                        ))}
+                                        {filteredMenu.suitable.length === 0 && <p className="text-sm text-slate-500 italic py-4">No suitable items found based on your filters.</p>}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Full Menu (No filters applied) */}
+                            {selectedAllergies.length === 0 && (
+                                <div>
+                                    <h3 className="text-xl font-bold text-slate-800 mb-5">Full Menu</h3>
+                                    <div className="space-y-4">
+                                        {menuItems.map((item, idx) => (
+                                            <div key={item.id} onClick={()=>setSelectedDish(item)} className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex justify-between items-center cursor-pointer transition-all duration-300 hover:border-slate-300 hover:shadow-lg hover:-translate-y-1 animate-slide-up" style={{animationDelay: `${idx * 0.05}s`}}>
+                                                <div className="flex gap-4 items-center">
+                                                    {item.imageUrl && <img src={item.imageUrl} alt={item.name} className="w-20 h-20 rounded-xl object-cover bg-slate-100 shadow-sm" />}
+                                                    <h4 className="font-bold text-slate-900 text-lg">{item.name}</h4>
+                                                </div>
+                                                <span className="font-bold text-slate-700 text-lg">₹{item.price.toFixed(2)}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Not Suitable Items */}
+                            {selectedAllergies.length > 0 && filteredMenu.notSuitable.length > 0 && (
+                                <div>
+                                    <div className="border-b-2 border-danger-500 mb-5 inline-block">
+                                        <h3 className="text-lg font-bold text-danger-700 pb-1">NOT SUITABLE</h3>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {filteredMenu.notSuitable.map(({item, conflictingAllergens}, idx) => (
+                                            <div key={item.id} onClick={()=>setSelectedDish(item)} className="bg-danger-50/50 border border-danger-100 rounded-2xl p-4 cursor-pointer transition-all duration-300 hover:shadow-md hover:border-danger-300 animate-slide-up" style={{animationDelay: `${idx * 0.05}s`}}>
+                                                <div className="flex justify-between items-start mb-3">
+                                                    <div className="flex gap-4 items-center">
+                                                        {item.imageUrl && <img src={item.imageUrl} alt={item.name} className="w-20 h-20 rounded-xl object-cover bg-slate-100 opacity-50 grayscale" />}
+                                                        <h4 className="font-bold text-slate-900 opacity-60 line-through text-lg">{item.name}</h4>
+                                                    </div>
+                                                    <span className="font-bold text-slate-700 opacity-60 text-lg">₹{item.price.toFixed(2)}</span>
+                                                </div>
+                                                <div className="bg-white/80 rounded-lg p-2.5 inline-block border border-danger-100 shadow-sm">
+                                                    <p className="text-sm text-danger-700 font-bold flex items-center gap-1.5">
+                                                        <IconX /> Contains: {conflictingAllergens.join(', ')}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // --- DISH DETAIL VIEW WITH ANIMATIONS ---
+        function DishDetailView({ dish, onBack, selectedAllergies }) {
+            const conflictingAllergens = dish.allergens.filter(a => selectedAllergies.includes(a));
+            const isUnsafe = conflictingAllergens.length > 0;
+            const isWarning = dish.status === 'Incomplete';
+
+            return (
+                <div className="bg-slate-100 flex-1 relative">
+                    <div className="mobile-container min-h-screen relative bg-white pb-10 animate-slide-in shadow-2xl">
+
+                        {/* Detail Header */}
+                        <div className="bg-slate-900/95 backdrop-blur-sm text-white p-4 flex items-center gap-4 sticky top-0 z-20 shadow-sm">
+                            <button onClick={onBack} className="p-2 bg-slate-800 rounded-full hover:bg-slate-700 active:scale-90 transition-all text-white">Back</button>
+                            <h2 className="font-bold text-lg truncate tracking-wide">Menu Item Details</h2>
+                        </div>
+
+                        {/* Image Banner */}
+                        {dish.imageUrl && (
+                            <div className="w-full h-72 bg-slate-200 relative overflow-hidden group">
+                                <img src={dish.imageUrl} alt={dish.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
+                            </div>
+                        )}
+
+                        <div className="p-8 border-b border-slate-100 relative bg-white rounded-t-3xl -mt-6 z-10 shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
+                            <h1 className="text-3xl font-extrabold text-slate-900 mb-2 tracking-tight">{dish.name}</h1>
+                            <p className="text-2xl text-amber-600 font-bold">₹{dish.price.toFixed(2)}</p>
+                        </div>
+
+                        <div className="px-8 py-6">
+                            {/* Alert Cards */}
+                            {isWarning ? (
+                                <div className="bg-warning-50 border border-warning-200 rounded-xl p-5 mb-8 shadow-sm">
+                                    <h3 className="font-bold text-amber-800 flex items-center gap-2 mb-1"><IconAlert/> Needs Confirmation</h3>
+                                    <p className="text-sm text-amber-700">Insufficient allergen information. Please confirm with restaurant staff.</p>
+                                </div>
+                            ) : isUnsafe ? (
+                                <div className="bg-danger-50 border border-danger-200 rounded-xl p-5 mb-8 shadow-sm">
+                                    <h3 className="font-bold text-danger-800 flex items-center gap-2 mb-1"><IconX/> Not Suitable</h3>
+                                    <p className="text-sm text-danger-700">Contains selected allergen: <strong>{conflictingAllergens.join(', ')}</strong></p>
+                                </div>
+                            ) : selectedAllergies.length > 0 ? (
+                                <div className="bg-brand-50 border border-brand-200 rounded-xl p-5 mb-8 shadow-sm">
+                                    <h3 className="font-bold text-brand-800 flex items-center gap-2 mb-1"><IconCheck/> Suitable Option</h3>
+                                    <p className="text-sm text-brand-700">Based on information provided by the restaurant, this item does not contain your selected allergens.</p>
+                                </div>
+                            ) : null}
+
+                            <div className="space-y-8">
+                                <div>
+                                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Category</h3>
+                                    <span className="inline-block bg-slate-100 text-slate-800 px-4 py-1.5 rounded-lg text-sm font-semibold border border-slate-200">{dish.category}</span>
+                                </div>
+
+                                <div>
+                                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Ingredients</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {dish.ingredients.map(ing => (
+                                            <span key={ing} className="bg-white border border-slate-200 shadow-sm text-slate-700 px-4 py-2 rounded-xl text-sm font-medium">{ing}</span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Allergens Present</h3>
+                                    {dish.allergens.length > 0 ? (
+                                        <div className="flex flex-wrap gap-2.5">
+                                            {dish.allergens.map(a => (
+                                                <span key={a} className={`px-4 py-2 rounded-xl text-sm font-bold shadow-sm ${conflictingAllergens.includes(a) ? 'bg-danger-500 text-white border border-danger-600' : 'bg-slate-800 text-white border border-slate-900'}`}>{a}</span>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <p className="text-sm text-slate-500 italic bg-slate-50 p-4 rounded-xl border border-slate-100">No major allergens reported by the kitchen.</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
